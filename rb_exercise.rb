@@ -20,7 +20,7 @@ puts nums_odd
 puts "Task 4"
 
 nums.push(11)
-nums.insert(0,0)
+nums.insert(0,0) #another way is use unshift nums.unshift(0)
 
 puts nums
 
@@ -37,6 +37,8 @@ puts "Task 6"
 # not sure why Task 6 does not work
 
 nums.delete_if { |num| num == num }
+
+#nums.uniq | return a new array nums.uniq! change the receiver value.
 
 puts nums
 
