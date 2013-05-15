@@ -1,6 +1,8 @@
 # coding: utf-8
 #Black Jack OO version
 
+require "pry"
+
 module Game
 	def cal(cards)
 		arr = cards.map { |v| v[1]}
@@ -35,18 +37,13 @@ module Game
 end
 
 
-class CasinoBoys
-	include Game
-
-	def hit(cards)
-		player_card = []
-		player_card << cards.pop
-		player_total = cal(player_card)
-		puts "Total is #{player_total}"
+class CasinoBoys;
+	def has_cards
+		@has_cards = []
 	end
 
-	def stay
-
+	def has_total
+		@total = 0
 	end
 end
 
@@ -67,19 +64,34 @@ class Player < CasinoBoys
 	def initialize(name, fund, ante)
 		@name = name
 		@fund = fund
-		@ante = ante	
+		@ante = ante
 	end
+
+
 
 end
 
 #The Cards
 
 class Cards
+	include Game
 	attr_accessor :deck
+
 	def initialize
 		suits = ["♠", "♥", "♦", "♣"]
 		cards = [2,3,4,5,6,7,8,9,10,"J","Q","K","A"]
 		@deck = suits.product(cards)
+	end
+
+	def hit
+		binding.pry
+		player_card = []
+		player_card << @deck.pop
+		player_card
+	end
+
+	def stay
+		puts "Stay"
 	end
 end
 
@@ -93,8 +105,9 @@ player1 = Player.new("Frank",1000, 10)
 
 deck = Cards.new
 
-player1.hit(deck)
 
 
+player1.has_cards << deck.hit
 
+p player1.has_cards
 
