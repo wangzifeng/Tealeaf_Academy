@@ -1,4 +1,4 @@
-# coding: utf-8
+ # coding: utf-8
 
 def cal(cards)
 	arr = cards.map { |v| v[1]}
@@ -23,26 +23,15 @@ def cal(cards)
 	total
 end
 
-def show_cards(cards, person)
-	puts "#{person} Cards"
-	puts "#{cards}"
-end
-
-def show_result(dealer_total, player_total)
-	if dealer_total > 21 && player_total > 21
-		puts "Dealer and player both busted!"
-	elsif dealer_total > 21
-		puts "Dealer busted!"
-	elsif player_total > 21
-		puts "Player busted"	
-	elsif dealer_total == 21
-		puts "Dealer is blackjack"	
-	elsif player_total == 21
-		puts "Player is blackjack, player wins" 
+def result(total, player)
+	if total > 21 
+		puts "#{player} busted!"
+		exit
+	elsif total == 21
+		puts "#{player} is blackjack"	
+		exit
 	end
-
-	puts "Dealer: Total point #{dealer_total}"
-	puts "Player: Total point #{player_total}"
+	puts "#{player}: Total point #{total}"
 end
 
 
@@ -75,40 +64,47 @@ puts "Welcome #{name}, enjoy the game!"
 puts "...Dealing Cards..."
 sleep(1)
 
-show_cards(dealer_card,"Dealer")
+puts "#{dealer_card}"
 puts "Dealer Total:"
 puts dealer_total
 
-show_cards(player_card,"Player")
+puts "#{player_card}"
 puts "Player Total:"
 puts player_total
 
+#Player Hand
 
-while player_total < 21 && dealer_total < 21
-	puts "You want 1) hit or 2)stay? Enter digit"
+while player_total < 21 
+	puts "You want 1) hit or 2)stay?"
 	operation = gets.chomp.to_i
 	case operation
 	when 1
-		dealer_card << card_shuffle.pop
 		player_card << card_shuffle.pop
-		dealer_total = cal(dealer_card)
 		player_total = cal(player_card)
-		show_cards(dealer_card)
-		show_cards(player_card)
-		show_result(dealer_total,player_total)
-		
+		puts "Your total is #{player_total}"
+		result(player_total, "Player")
 	when 2
-	  dealer_total = cal(dealer_card)
-		player_total = cal(player_card)
-		show_cards(dealer_card)
-		show_cards(player_card)
-		show_result(dealer_total,player_total)
+		puts "Stay"
 		break
-	else
-		puts "pls enter your choice in digit"
 	end
 end
 
+
+#Dealer Hand
+
+while dealer_total < 17
+	dealer_card << card_shuffle.pop
+	dealer_total = cal(dealer_card)
+	result(dealer_total, "Dealer")
+end
+
+if dealer_total > player_total
+	puts "Dealer wins"
+elsif dealer_total < player_total
+	puts "player Win"
+end
+
+exit
 
 
 
