@@ -1,5 +1,5 @@
 # coding: utf-8
-#Black Jack OO version
+#Black Jack OO version by Frank Wang
 
 require "pry"
 
@@ -24,19 +24,16 @@ module FairPlay
 		total
 	end
 
-
-
 	def result(total, player)
-	if total > 21 
-		puts "#{player} busted!"
-		exit
-	elsif total == 21
-		puts "#{player} is blackjack"	
-		exit
+		puts "#{player.class}: #{player.cards} Total point #{total}"
+		if total > 21 
+			puts "#{player.class} busted!"
+			exit
+		elsif total == 21
+			puts "#{player.class} is blackjack"	
+			exit
+		end
 	end
-		puts "#{player}: Total point #{total}"
-	end
-
 end
 
 
@@ -99,25 +96,52 @@ class Game
 	include FairPlay
 
 	def intro(player)
-		puts "Welcome! #{player.name}"
+		puts "Welcome to Las Vegas! #{player.name}"
 	end
 
-	def game_on(player,deck)
+	def game_on(dealer,player,deck)
 		intro(player)
+		#binding.pry
+		player_hand(player,deck)
+		dealer_hand(dealer,deck)
+		compare(player,dealer)
+	end
+
+	def player_hand(player,deck)
 		player.cards << deck.pop
 		player.cards << deck.pop
 		while player.total < 21
-			binding.pry
 			puts "You want 1) hit or 2)stay?"
-			operation = gets.chomp.to_i
+			operation = gets.chomp
 			case operation
 			when "1"
+				player.cards << deck.pop
 				player.total = cal(player.cards)
-				puts "Your total is #{player.total}"
+				result(player.total,player)
 			when "2"
 				puts "Stay"
-				break
+				result(player.total,player)
+				return
 			end
+		end
+	end
+
+	def dealer_hand(dealer,deck)
+		dealer.cards << deck.pop
+		dealer.cards << deck.pop
+		while dealer.total < 17
+			dealer.cards << deck.pop
+			dealer.total = cal(dealer.cards)
+			puts "Dealer total is #{dealer.total}"
+			result(dealer.total,dealer)
+		end	
+	end
+
+	def compare(player,dealer)
+		if dealer.total > player.total
+			puts "Dealer wins"
+		elsif dealer.total < player.total
+			puts "Player Win"
 		end
 	end
 end
@@ -129,6 +153,6 @@ player1 = Player.new("Frank",1000,10)
 game = Game.new
 
 deck = Cards.new.shuffle
-game.game_on(player1,deck)
+game.game_on(dealer,player1,deck)
 
 
