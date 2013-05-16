@@ -110,6 +110,7 @@ class Game
 	def player_hand(player,deck)
 		player.cards << deck.pop
 		player.cards << deck.pop
+		result(cal(player.cards),player)
 		while player.total < 21
 			puts "You want 1) hit or 2)stay?"
 			operation = gets.chomp
